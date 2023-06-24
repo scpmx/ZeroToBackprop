@@ -43,12 +43,10 @@ class SingleParameterNetworkTrainer:
     def Fit(self, spn: SingleParameterNetwork, learningRate: float) -> None:
         # <Exercise>
         # Write a basic gradient descent algorithm 
-        cost = self.ComputeNetworkCost(spn)
-        while cost > 0.0001:
-            grad = self.ComputeGradient(spn)
+        grad = self.ComputeGradient(spn)
+        while grad > 0.0001:
             spn.ApplyGradient(-1 * grad, learningRate)
-            spn.Show() # See the cost decrease :D
-            cost = self.ComputeNetworkCost(spn)
+            grad = self.ComputeGradient(spn)
 
 # Randomly initialize parameter for network
 w = random.uniform(0, 1)
