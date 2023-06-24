@@ -20,8 +20,8 @@ class TwoParameterLinearNetwork:
 
 class TwoParameterLinearNetworkTrainer:
 	
-	def __init__(self, tpn: TwoParameterNetwork, t00, t01, t10, t11, lr):
-		self.tpn = tpn
+	def __init__(self, tpln, t00, t01, t10, t11, lr):
+		self.tpln = tpln
 		self.t00 = t00
 		self.t01 = t01
 		self.t10 = t10
@@ -29,16 +29,18 @@ class TwoParameterLinearNetworkTrainer:
 		self.lr = lr
 		
 	def CalculateNetworkCost(self):
-		c0 = pow(tpn.FeedForward(t00) - t01, 2)
-		c1 = pow(tpn.FeedForward(t10) - t11, 2)
+		c0 = pow(tpln.FeedForward(t00) - t01, 2)
+		c1 = pow(tpln.FeedForward(t10) - t11, 2)
 		return (c0 + c1) / 2
 	
 	def CalculateGradient(self):
-		gw0 = 2 * (tpn.w * pow(t00, 2) + (tpn.b * t00) - (t00 * t01))
-		gw1 = 2 * (tpn.w * pow(t10, 2) + (tpn.b * t10) - (t10 * t11))
+		w = tpln.w
+		b = tpln.b
+		gw0 = 2 * (w * pow(t00, 2) + (b * t00) - (t00 * t01))
+		gw1 = 2 * (w * pow(t10, 2) + (b * t10) - (t10 * t11))
 		gw = (gw0 + gw1) / 2
-		gb0 = 2 * (tpn.w * t00 + tpn.b - t01)
-		gb1 = 2 * (tpn.w * t10 + tpn.b - t11)
+		gb0 = 2 * (w * t00 + b - t01)
+		gb1 = 2 * (w * t10 + b - t11)
 		gb = (gb0 + gb1) / 2
 		return (-gw, -gb)
 	
@@ -46,7 +48,7 @@ class TwoParameterLinearNetworkTrainer:
 		cnt = 0
 		(gw, gb) = self.CalculateGradient()
 		while math.sqrt(gw*gw+gb*gb) > 0.0001:
-			tpn.ApplyGradient(gw, gb, self.lr)
+			tpln.ApplyGradient(gw, gb, self.lr)
 			(gw, gb) = self.CalculateGradient()
 			cnt += 1
 		print("solved in", str(cnt), "steps")
@@ -67,13 +69,13 @@ learningRate = 0.1
 
 print(t00, t01, t10, t11)
 
-tpnt = TwoParameterLinearNetworkTrainer(tpln, t00, t01, t10, t11, learningRate)
+tplnt = TwoParameterLinearNetworkTrainer(tpln, t00, t01, t10, t11, learningRate)
 
 initialCost = tplnt.CalculateNetworkCost()
 print("initial cost:", initialCost)
 
 tplnt.FitNetwork()
-tpn.Show()
+tpln.Show()
 
-finalCost = tpnt.CalculateNetworkCost()
+finalCost = tplnt.CalculateNetworkCost()
 print("final cost:", finalCost)
