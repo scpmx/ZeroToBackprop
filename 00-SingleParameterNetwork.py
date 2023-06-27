@@ -7,7 +7,7 @@ class SingleParameterNetwork:
     
     def FeedForward(self, i: float) -> float:
         # <Exercise>
-        # Apply the network on the input i
+        # Apply the network to the input i
         return self.w * i
 
     def ApplyGradient(self, grad: float, learningRate: float) -> None:
@@ -19,7 +19,7 @@ class SingleParameterNetwork:
         return self.w
     
     def Show(self) -> None:
-        print("w:", str(self.w))
+        print("weight:", str(self.w))
 
 class SingleParameterNetworkTrainer:
 
@@ -44,7 +44,7 @@ class SingleParameterNetworkTrainer:
         # <Exercise>
         # Write a basic gradient descent algorithm 
         grad = self.ComputeGradient(spn)
-        while grad > 0.0001:
+        while grad > 0.00001:
             spn.ApplyGradient(-1 * grad, learningRate)
             grad = self.ComputeGradient(spn)
 
